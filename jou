@@ -1,0 +1,16 @@
+<?php
+function getUserIP() {
+    $ip = $_SERVER['REMOTE_ADDR'];
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+    }
+    return trim($ip);
+}
+$user_ip = getUserIP();
+echo "<h2>Sinun julkinen IP-osoitteesi on: " . htmlspecialchars($user_ip) . "</h2>";
+$file = fopen("iplog.txt", "a");
+fwrite($file, date("Y-m-d H:i:s") . " - " . $user_ip . "\n");
+fclose($file);
+?>
